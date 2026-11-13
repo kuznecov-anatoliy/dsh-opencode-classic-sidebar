@@ -1,17 +1,23 @@
-# Sidebar suite
+# OpenCode classic sidebar for DeepSeek Harness
 
-A DeepSeek Harness Web UI bundle that redraws the sidebar: a column of project
-tiles, the selected project's sessions next to it, the global panel buttons in
-the Windows caption strip, and an account balance chip.
+`dsh-opencode-classic-sidebar` brings the **classic, pre-redesign OpenCode sidebar
+layout** to the DSH Web UI: a narrow column of project tiles on the left, the
+selected project's sessions next to it, the global panel buttons in the Windows
+caption strip, and an account balance chip.
+
+"Classic" means the OpenCode sidebar as it looked before its redesign — the layout
+this bundle reproduces. It is an independent plugin: it copies a layout, not
+OpenCode's code, and is not affiliated with the OpenCode project.
 
 ## Install
 
 ```
-dsh plugin add kuznecov-anatoliy/dsh-sidebar-suite
+dsh plugin add kuznecov-anatoliy/dsh-opencode-classic-sidebar
 ```
 
-Restart DSH after installing. Remove it with `dsh plugin remove dsh-sidebar-suite`;
-the shipped workspace browser comes back.
+Restart DSH after installing. Remove it with
+`dsh plugin remove dsh-opencode-classic-sidebar`; the shipped workspace browser
+comes back.
 
 ## What it does
 
@@ -50,7 +56,7 @@ the shipped workspace browser comes back.
   reachable without the shipped search.
 - Sessions are archived, never deleted — the harness API has no session delete.
 - Renaming a session goes through a small Host route
-  (`POST /api/dsh-sidebar-suite/session-rename`) that calls
+  (`POST /api/dsh-opencode-classic-sidebar/session-rename`) that calls
   `sessionController.rename`, because the shipped rename dialog belongs to the
   browser this bundle replaces. If that internal service is unavailable the
   action reports a failure instead of pretending to succeed.

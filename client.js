@@ -28,12 +28,12 @@
  *   - the account balance chip above the Settings/account row.
  */
 window.__ModuleLoader__.load({
-  id: 'dsh-sidebar-suite',
+  id: 'dsh-opencode-classic-sidebar',
   factory(require) {
     const React = require('react')
     const h = React.createElement
 
-    const STORAGE_KEY = 'dsh-sidebar-suite:selected:v1'
+    const STORAGE_KEY = 'dsh-opencode-classic-sidebar:selected:v1'
     const ALL = '@all'
 
     const CSS = `
@@ -767,13 +767,13 @@ body[data-ds-dark-theme] {
 }
 `
 
-    const BALANCE_URL = '/api/dsh-sidebar-suite/balance'
-    const BALANCE_REFRESH_URL = '/api/dsh-sidebar-suite/balance/refresh'
+    const BALANCE_URL = '/api/dsh-opencode-classic-sidebar/balance'
+    const BALANCE_REFRESH_URL = '/api/dsh-opencode-classic-sidebar/balance/refresh'
     /**
      * Session rename has no Client service: the shipped dialog belongs to the
      * browser we replaced. The Host half exposes the tiny route behind it.
      */
-    const SESSION_RENAME_URL = '/api/dsh-sidebar-suite/session-rename'
+    const SESSION_RENAME_URL = '/api/dsh-opencode-classic-sidebar/session-rename'
     /** Balance moves slowly; a minute between polls is plenty (focus also refreshes). */
     const BALANCE_POLL_MS = 60_000
     /** Below these values the chip turns amber, then red. */
@@ -1194,7 +1194,7 @@ body[data-ds-dark-theme] {
         await navigator.clipboard.writeText(value)
         return true
       } catch (error) {
-        console.error('[sidebar-suite] clipboard write failed', error)
+        console.error('[opencode-classic] clipboard write failed', error)
         return false
       }
     }
@@ -1369,7 +1369,7 @@ body[data-ds-dark-theme] {
         try {
           uiWorkspace.openSession(sessionId)
         } catch (error) {
-          console.error('[sidebar-suite] openSession failed', error)
+          console.error('[opencode-classic] openSession failed', error)
         }
       }, [])
 
@@ -1392,7 +1392,7 @@ body[data-ds-dark-theme] {
         try {
           uiWorkspace.startSession(workspaceId)
         } catch (error) {
-          console.error('[sidebar-suite] startSession failed', error)
+          console.error('[opencode-classic] startSession failed', error)
         }
       }, [active, items, list, archivedSet])
 
@@ -1426,7 +1426,7 @@ body[data-ds-dark-theme] {
           writeStored(created.workspaceId)
           uiWorkspace.startSession(created.workspaceId, { clearPreviousDraft: false })
         } catch (error) {
-          console.error('[sidebar-suite] add project failed', error)
+          console.error('[opencode-classic] add project failed', error)
           setAddError(text.addFailed)
         } finally {
           setAdding(false)
@@ -1509,7 +1509,7 @@ body[data-ds-dark-theme] {
             setDialog({ kind: 'deleteProject', id: action.id, value: action.title ?? '' })
           }
         } catch (error) {
-          console.error('[sidebar-suite] action failed', error)
+          console.error('[opencode-classic] action failed', error)
           setNotice(action.kind === 'archive' && action.running === true ? text.archiveBusy : text.actionFailed)
         }
       }, [openSession, text])
@@ -1547,7 +1547,7 @@ body[data-ds-dark-theme] {
           }
           setDialog(null)
         } catch (error) {
-          console.error('[sidebar-suite] dialog action failed', error)
+          console.error('[opencode-classic] dialog action failed', error)
           setNotice(text.actionFailed)
         } finally {
           setPending(false)
@@ -1818,7 +1818,7 @@ body[data-ds-dark-theme] {
     /** The standard props are the slot contract; a missing pair is a contract change. */
     function ProjectsRail(props) {
       if (typeof props.useWorkspaces !== 'function' || typeof props.useSessions !== 'function') {
-        console.error('[sidebar-suite] props missing useWorkspaces/useSessions')
+        console.error('[opencode-classic] props missing useWorkspaces/useSessions')
         return null
       }
       return h(Pane, props)
@@ -1827,7 +1827,7 @@ body[data-ds-dark-theme] {
     /**
      * Sidebar-footer account balance chip.
      *
-     * The number comes from the Host route `/api/dsh-sidebar-suite/balance`
+     * The number comes from the Host route `/api/dsh-opencode-classic-sidebar/balance`
      * (credentials never reach the browser). A click opens the DeepSeek top-up
      * page when the host reported one, Shift+click forces a refresh, and the
      * chip also polls once a minute and on window focus.
@@ -2118,7 +2118,7 @@ html[data-windows-titlebar] [data-sidebar-scrollport] > nav {
           // A second click on the open panel returns to the conversation.
           layout.selectPanel(active === id ? null : id)
         } catch (error) {
-          console.error('[sidebar-suite] panel selection failed', error)
+          console.error('[opencode-classic] panel selection failed', error)
         }
       }
 
@@ -2144,7 +2144,7 @@ html[data-windows-titlebar] [data-sidebar-scrollport] > nav {
           ctx.effect(() => {
             const tag = insertStyles()
             return () => { tag.remove() }
-          }, 'sidebar-suite: styles')
+          }, 'opencode-classic: styles')
           // SlotCore sorts a cell's entries by priority ascending and the outlet
           // renders the first: lower than the shipped 0 wins the election.
           ctx.slots.inject('sidebar.workspaces', () => ctx.slots.register({
@@ -2155,7 +2155,7 @@ html[data-windows-titlebar] [data-sidebar-scrollport] > nav {
           // above the Settings/account row.
           ctx.slots.inject('sidebar.footer.action', () => ctx.slots.register({
             name: 'sidebar.footer.action',
-            id: 'sidebar-suite-balance',
+            id: 'opencode-classic-balance',
             order: -10,
           }, BalanceChip))
           // Windows only: elsewhere the caption strip does not exist and the
@@ -2163,12 +2163,12 @@ html[data-windows-titlebar] [data-sidebar-scrollport] > nav {
           if (document.documentElement.hasAttribute('data-windows-titlebar')) {
             ctx.slots.inject('shell.overlay', () => ctx.slots.register({
               name: 'shell.overlay',
-              id: 'sidebar-suite-panels',
+              id: 'opencode-classic-panels',
               order: 200,
             }, PanelToolbar))
           }
         } catch (error) {
-          console.error('[sidebar-suite] apply failed', error)
+          console.error('[opencode-classic] apply failed', error)
         }
       },
     }

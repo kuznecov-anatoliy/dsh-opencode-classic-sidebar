@@ -1,19 +1,27 @@
 {
-  "name": "dsh-sidebar-suite",
+  "name": "dsh-opencode-classic-sidebar",
   "version": "0.1.0",
-  "description": "OpenCode-style DSH sidebar: a project column with a per-project session list and session actions, panel buttons moved into the Windows caption strip, and an account balance chip.",
+  "description": "The classic (pre-redesign) OpenCode sidebar layout for DeepSeek Harness: a project column next to the selected project's session list with pin, rename, fork, copy id and archive, an archive view, panel buttons in the Windows caption strip, and an account balance chip.",
   "type": "module",
   "license": "MIT",
   "author": "kuznecov-anatoliy",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kuznecov-anatoliy/dsh-sidebar-suite.git"
+    "url": "git+https://github.com/kuznecov-anatoliy/dsh-opencode-classic-sidebar.git"
   },
-  "homepage": "https://github.com/kuznecov-anatoliy/dsh-sidebar-suite#readme",
+  "homepage": "https://github.com/kuznecov-anatoliy/dsh-opencode-classic-sidebar#readme",
   "bugs": {
-    "url": "https://github.com/kuznecov-anatoliy/dsh-sidebar-suite/issues"
+    "url": "https://github.com/kuznecov-anatoliy/dsh-opencode-classic-sidebar/issues"
   },
-  "keywords": ["dsh", "dsh-plugin", "deepseek-harness", "sidebar", "sessions", "projects"],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "opencode",
+    "sidebar",
+    "sessions",
+    "projects"
+  ],
   "engines": {
     "dsh": ">=0.2.2-rc.1 <0.3.0-0"
   },

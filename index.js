@@ -18,13 +18,13 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, join } from 'node:path'
 
-const BALANCE_PATH = '/api/dsh-sidebar-suite/balance'
-const REFRESH_PATH = '/api/dsh-sidebar-suite/balance/refresh'
+const BALANCE_PATH = '/api/dsh-opencode-classic-sidebar/balance'
+const REFRESH_PATH = '/api/dsh-opencode-classic-sidebar/balance/refresh'
 /**
  * Session rename has no Client service: the shipped dialog lives inside the
  * browser this plugin replaces. The route is that missing verb, and nothing else.
  */
-const SESSION_RENAME_PATH = '/api/dsh-sidebar-suite/session-rename'
+const SESSION_RENAME_PATH = '/api/dsh-opencode-classic-sidebar/session-rename'
 /** Balance moves slowly; reuse a reading within 30s so refresh clicking cannot hammer upstream. */
 const CACHE_MS = 30_000
 const API_KEY_REF = 'DEEPSEEK_API_KEY'
@@ -59,7 +59,7 @@ function homeDir() {
 
 /** Current state file: the plugin-private directory under DSH_HOME. */
 function stateFile() {
-  return join(homeDir(), 'dsh-sidebar-suite', 'day-spend.json')
+  return join(homeDir(), 'dsh-opencode-classic-sidebar', 'day-spend.json')
 }
 
 /** Earlier plugins kept the same bookkeeping: read once to keep the history. */
@@ -383,7 +383,7 @@ export function apply(ctx) {
         requestBody: 'buffered',
         fetch: async () => json(await snapshot(ctx, false)),
       }),
-    'sidebar-suite: balance route',
+    'opencode-classic: balance route',
   )
 
   ctx.effect(
@@ -394,7 +394,7 @@ export function apply(ctx) {
         requestBody: 'buffered',
         fetch: async () => json(await snapshot(ctx, true)),
       }),
-    'sidebar-suite: balance refresh route',
+    'opencode-classic: balance refresh route',
   )
 
   // Rename one Session: the only verb the rail needs from the Host API that the
@@ -424,6 +424,6 @@ export function apply(ctx) {
           }
         },
       }),
-    'sidebar-suite: session rename route',
+    'opencode-classic: session rename route',
   )
 }

@@ -1,6 +1,7 @@
-# Sidebar suite
+# OpenCode classic sidebar
 
-`dsh-sidebar-suite` redraws the DSH Web UI sidebar. It ships two halves:
+`dsh-opencode-classic-sidebar` reproduces the classic (pre-redesign) OpenCode
+sidebar layout inside the DSH Web UI. It ships two halves:
 
 - `client.js` — a static Client module. It registers three slots:
   `sidebar.workspaces` (the project column and session list),
@@ -11,9 +12,13 @@
 
 ```yaml
 - insert:
-    - id: sidebar-suite
-      name: dsh-sidebar-suite
+    - id: opencode-classic-sidebar
+      name: dsh-opencode-classic-sidebar
 ```
+
+"Classic" is the layout only: the project column, the session list beside it and
+the panel buttons in the window strip. No OpenCode code is used, and this bundle
+is not affiliated with the OpenCode project.
 
 ## How the region is taken over
 
@@ -31,9 +36,9 @@ and every mutation goes through public Client services:
 
 The one exception is session rename: there is no Client service for it, because
 the shipped dialog lives inside the replaced browser. The Host half exposes
-`POST /api/dsh-sidebar-suite/session-rename` with `{ sessionId, title }` and
-calls `ctx.get('sessionController').rename(...)`. A missing service answers 503
-and the Client shows a failure notice.
+`POST /api/dsh-opencode-classic-sidebar/session-rename` with
+`{ sessionId, title }` and calls `ctx.get('sessionController').rename(...)`. A
+missing service answers 503 and the Client shows a failure notice.
 
 ## What the sidebar carries
 
@@ -54,11 +59,12 @@ and the Client shows a failure notice.
   archive toggle, a new-chat button and the shortened `~` path of the workspace
   (full path in the tooltip).
 - **Archive view** — archived sessions of every project, with restore.
-- **Balance chip** — reads `/api/dsh-sidebar-suite/balance` (GET) and
+- **Balance chip** — reads `/api/dsh-opencode-classic-sidebar/balance` (GET) and
   `/balance/refresh` (POST), caches a reading for 30 s, polls every 60 s and on
   window focus, and keeps the day's spend baseline under
-  `DSH_HOME/dsh-sidebar-suite/day-spend.json` (falling back to the earlier
-  `dsh-projects-rail` and `dsh-rail` files once, so an existing history survives).
+  `DSH_HOME/dsh-opencode-classic-sidebar/day-spend.json` (falling back to the
+  earlier `dsh-projects-rail` and `dsh-rail` files once, so an existing history
+  survives).
 - **Panel buttons (Windows only)** — the Plugins and Schedules buttons render in
   the caption strip next to `[data-windows-menu]`, and the shipped navigation
   list is hidden by a rule scoped to `html[data-windows-titlebar]`, so other

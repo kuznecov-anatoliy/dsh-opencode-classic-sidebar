@@ -245,7 +245,7 @@ const tick = () => new Promise((resolve) => setTimeout(resolve, 20))
   assert(calls.create[0].path === pickedPath, 'the created Workspace uses the picked path')
   assert(calls.startSession.length === 1, 'a fresh Session opened in the new Workspace')
   assert(calls.startSession[0][0] === 'ws-new', 'the fresh Session targets the new Workspace')
-  assert(storage['dsh-sidebar-suite:selected:v1'] === 'ws-new', 'the new project became the remembered selection')
+  assert(storage['dsh-opencode-classic-sidebar:selected:v1'] === 'ws-new', 'the new project became the remembered selection')
 
   // 2. Cancelling the dialog is a no-op.
   pickedPath = null
@@ -259,7 +259,7 @@ const tick = () => new Promise((resolve) => setTimeout(resolve, 20))
   addTile.props.onClick()
   await tick()
   assert(calls.create.length === 1, 'no duplicate Workspace for a known folder')
-  assert(storage['dsh-sidebar-suite:selected:v1'] === 'ws1', 'the known project became selected')
+  assert(storage['dsh-opencode-classic-sidebar:selected:v1'] === 'ws1', 'the known project became selected')
   assert(calls.openSession.includes('s1'), 'its freshest Session opened')
 
   // 4. Palette: a tile carries a stable hue; "All" and "add" stay neutral, and
@@ -377,17 +377,17 @@ const tick = () => new Promise((resolve) => setTimeout(resolve, 20))
   danger.props.onClick()
   await tick()
   assert(calls.remove.length === 1 && calls.remove[0] === 'ws1', 'Delete reached workspaces.delete')
-  assert(storage['dsh-sidebar-suite:selected:v1'] === undefined, 'the deleted project stopped being remembered')
+  assert(storage['dsh-opencode-classic-sidebar:selected:v1'] === undefined, 'the deleted project stopped being remembered')
 
   // 10. The merged half: panel buttons in the Windows caption strip.
-  assert(registered.has('shell.overlay:sidebar-suite-panels'), 'the caption-strip toolbar is registered')
+  assert(registered.has('shell.overlay:opencode-classic-panels'), 'the caption-strip toolbar is registered')
   const mergedCss = styleTags[0].textContent
   assert(mergedCss.includes('[data-dss-panels]'), 'toolbar CSS shipped in the same stylesheet')
   assert(
     mergedCss.includes('html[data-windows-titlebar] [data-sidebar-scrollport] > nav'),
     'the shipped panel list is hidden only on Windows',
   )
-  const PanelToolbar = registered.get('shell.overlay:sidebar-suite-panels')
+  const PanelToolbar = registered.get('shell.overlay:opencode-classic-panels')
   hookCursor = 0
   const toolbar = PanelToolbar({
     usePanelInfo: (selector) => selector({ activePanelId: 'plugins' }),
@@ -423,7 +423,7 @@ const tick = () => new Promise((resolve) => setTimeout(resolve, 20))
     renamed: calls.rename,
     removed: calls.remove,
     requests: calls.requests.map((request) => request.url),
-    stored: storage['dsh-sidebar-suite:selected:v1'],
+    stored: storage['dsh-opencode-classic-sidebar:selected:v1'],
     pathLine: pathLine.props.children,
   }, null, 2))
 })().catch((error) => {
