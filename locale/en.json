@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Sidebar suite",
+    "description": "Replaces the sidebar's workspace browser with an OpenCode-style layout: a project column, the selected project's session list with session actions, panel buttons in the Windows caption strip, and an account balance chip.",
+    "detail": "docs/DETAIL.md"
+  }
+}
