@@ -9,6 +9,14 @@ caption strip, and an account balance chip.
 this bundle reproduces. It is an independent plugin: it copies a layout, not
 OpenCode's code, and is not affiliated with the OpenCode project.
 
+![The sidebar: panel buttons in the caption strip, project column, project header with its path, and the session list](assets/sidebar-overview.png)
+
+Top to bottom in that screenshot: the **Plugins** and **Schedules** buttons in the
+window caption strip, the muted brand row, the contour-only **New session** bar,
+the **project column** with live markers (All, then one tile per project, then the
+**+** tile), the project header with its `~` path and actions, and the **session
+list** of the selected project with the open session filled in.
+
 ## Install
 
 ```

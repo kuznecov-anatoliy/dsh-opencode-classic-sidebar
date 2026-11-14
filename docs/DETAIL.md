@@ -20,6 +20,8 @@ sidebar layout inside the DSH Web UI. It ships two halves:
 the panel buttons in the window strip. No OpenCode code is used, and this bundle
 is not affiliated with the OpenCode project.
 
+![The sidebar with the caption-strip panel buttons, project column, project header and session list](../assets/sidebar-overview.png)
+
 ## How the region is taken over
 
 The shipped `WorkspaceBrowser` occupies the single `sidebar.workspaces` slot at
