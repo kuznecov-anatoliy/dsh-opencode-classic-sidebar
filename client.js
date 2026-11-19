@@ -330,7 +330,10 @@ body[data-ds-dark-theme] {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 13px;
+  /* A step above the session rows: the header names the whole list, so it reads
+     as a heading instead of matching the row text under it. */
+  font-size: 14px;
+  line-height: 18px;
   font-weight: 600;
   color: var(--dsw-alias-label-primary);
 }
@@ -361,7 +364,9 @@ body[data-ds-dark-theme] {
 /* New session, moved from the shipped bar above the column into the gap under
    the project name: the shipped row is hidden while this pane is on screen, so
    starting a chat happens where the project it starts in is named. Contour only
-   (the theme fill would outshout the list), 32px like a two-row control. */
+   (the theme fill would outshout the list), 32px like a two-row control. The
+   header's own 8px of bottom padding plus 16px here is the 24px that keeps the
+   bar off the project name — three times the 8px it had at first. */
 .dpr-new {
   flex: none;
   box-sizing: border-box;
@@ -370,7 +375,7 @@ body[data-ds-dark-theme] {
   justify-content: center;
   gap: 6px;
   height: 32px;
-  margin: 0 4px 10px 0;
+  margin: 16px 4px 10px 0;
   padding: 0 10px;
   border: 1px solid var(--dsw-alias-border-l2);
   border-radius: 8px;
