@@ -20,10 +20,11 @@ sidebar layout inside the DSH Web UI. It ships two halves:
 the panel buttons in the window strip. No OpenCode code is used, and this bundle
 is not affiliated with the OpenCode project.
 
-![The sidebar with the caption-strip panel buttons, project column, project header and session list](../assets/sidebar-overview.png)
+![The sidebar with the project column, the project header, the New session bar and the session list](../assets/sidebar-overview.png)
 
-The screenshot shows an earlier revision with the brand row and the New-session bar
-above the column; both changed since (see **What the sidebar carries**).
+The screenshot shows the current arrangement: no brand row, the **New session** bar
+between the project header and the session list, and no duplicate **+** in the
+header. The caption strip with the panel buttons is above the cropped area.
 
 ## How the region is taken over
 

@@ -9,16 +9,15 @@ caption strip, and an account balance chip.
 this bundle reproduces. It is an independent plugin: it copies a layout, not
 OpenCode's code, and is not affiliated with the OpenCode project.
 
-![The sidebar: panel buttons in the caption strip, project column, project header with its path, and the session list](assets/sidebar-overview.png)
+![The sidebar: project column with live markers, the project header with its path, the New session bar and the session list](assets/sidebar-overview.png)
 
-The screenshot shows an earlier revision: it still has the muted **brand row** and
-the **New session** bar above the column. Since then the brand is removed and that
-bar moved under the project name, into the gap before the session list. What the
-screenshot gets right, top to bottom: the **Plugins** and **Schedules** buttons in
-the window caption strip, the **project column** with live markers (All, then one
-tile per project, then the **+** tile), the project header with its `~` path and
-actions, and the **session list** of the selected project with the open session
-filled in.
+Top to bottom in that screenshot: the **project column** — **All**, then one tile
+per project (the project open in the main view wears a ring and a blue pulse),
+then the **+** tile — the **project header** with the session count, the project
+**…** menu, the archive toggle and the shortened `~` path of the workspace, the
+**New session** bar, and the **session list** of the selected project with the
+open session filled in. The brand row is gone; the window caption strip with the
+**Plugins** and **Schedules** buttons sits above the cropped area.
 
 ## Install
 
