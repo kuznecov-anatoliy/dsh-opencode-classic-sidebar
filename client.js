@@ -358,6 +358,42 @@ body[data-ds-dark-theme] {
   background: var(--dsw-alias-interactive-bg-hover);
   color: var(--dsw-alias-label-primary);
 }
+/* New session, moved from the shipped bar above the column into the gap under
+   the project name: the shipped row is hidden while this pane is on screen, so
+   starting a chat happens where the project it starts in is named. Contour only
+   (the theme fill would outshout the list), 32px like a two-row control. */
+.dpr-new {
+  flex: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  margin: 0 4px 10px 0;
+  padding: 0 10px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.dpr-new:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-primary);
+}
+.dpr-new:focus-visible {
+  outline: 2px solid var(--dsw-alias-state-business-primary, var(--dsw-alias-brand-primary, #4d6bfe));
+  outline-offset: -2px;
+}
+.dpr-new-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .dpr-list {
   flex: 1 1 auto;
   min-height: 0;
@@ -369,10 +405,11 @@ body[data-ds-dark-theme] {
      session column instead of stacking as one solid block. Grown by half from
      the original 4px, so the rows read as separate sessions at a glance. */
   gap: 6px;
-  /* A breath between the project name above and its Sessions: the two used to
-     run together into one block of text. The gap sits on the list alone, so the
-     project column keeps starting at the very top of the region. */
-  padding: 20px 4px 8px 0;
+  /* The breath between the project header and its Sessions now belongs to the
+     New-session bar above; what is left here keeps the first row off the bar's
+     bottom edge. The gap sits on the list alone, so the project column keeps
+     starting at the very top of the region. */
+  padding: 2px 4px 8px 0;
   scrollbar-width: thin;
 }
 .dpr-row {
@@ -622,26 +659,43 @@ body[data-ds-dark-theme] {
   font-size: 12px;
   color: var(--dsw-alias-label-tertiary);
 }
-/* Shipped sidebar chrome above our column: the brand wordmark and the New
-   session bar carry the sidebar's brightest ink, which outshouts the project
-   and session list under them. Their CSS-module class names are build hashes,
-   so these overrides ride the Slot anchors instead — a [data-slot="<key>"]
-   wrapper is the documented, stable seam (a display: contents div, so it can
-   only reach the occupant's own element). */
-/* The wordmark artwork is an svg in every build; builds without the brand
-   artwork slot print a text span instead, so both carry the quiet ink (the
-   anchor itself is display: contents and paints nothing). */
-[data-slot='sidebar.brand.mark'] svg,
-[data-slot='sidebar.brand.name'] svg {
-  opacity: 0.55;
-  filter: grayscale(1);
+/* Shipped sidebar chrome above our column is replaced by this bundle's own
+   header: the brand band and the shipped New-session bar both go away. Their
+   CSS-module class names are build hashes, so the overrides ride the seams the
+   shell guarantees — the [data-slot="<key>"] anchors (display: contents divs),
+   data-window-drag on the logo row and data-sidebar-toggle on the collapse
+   control. */
+/* The brand is gone. Its two slots stop painting, and off macOS the wrapper that
+   held them is hidden as well: on Windows the brand doubles as a New Session
+   button, and an empty one would leave an invisible click target in the row. The
+   macOS rail reuses the mark slot inside the toggle, so the wrapper rule is
+   scoped away from darwin; the anchor rule alone is enough there. */
+[data-slot='sidebar.brand.mark'],
+[data-slot='sidebar.brand.name'] {
+  display: none;
 }
-[data-slot='sidebar.brand.name'] :where(span, div) {
-  color: var(--dsw-alias-label-tertiary, #8a8f98);
+html:not([data-platform='darwin']) [data-window-drag]:has([data-slot='sidebar.brand.mark']) > :has([data-slot='sidebar.brand.mark']) {
+  display: none;
 }
-/* New session keeps only its contour: the fill drops to whatever sidebar
-   surface sits behind it, so the row reads as an outline next to the list
-   instead of the brightest control in the column. */
+/* Windows: the toggle is position: fixed over the caption strip (the shipped
+   collapsed state already relies on exactly that), so the logo band collapses to
+   zero height and the column moves up by its 40px. On macOS the toggle stays in
+   flow, so there the row keeps its height and only the brand disappears. */
+html[data-windows-titlebar] [data-window-drag]:has([data-slot='sidebar.brand.mark']) {
+  height: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+/* The shipped New-session bar moves into the project header. While the pane is on
+   screen its row is emptied; in the collapsed rail the pane is not rendered, so
+   the row survives and the rail keeps a way to start a chat. */
+:has(.dpr-pane) > :has(> [data-slot='sidebar.session.action']) {
+  display: none;
+}
+/* What is left of the New session slot (the rail) keeps only its contour: the
+   fill drops to whatever sidebar surface sits behind it, so the control reads as
+   an outline next to the list instead of the brightest one in the column. */
 [data-slot='sidebar.session.action'] button {
   background: transparent;
   border-color: var(--dsw-alias-border-l2);
@@ -824,6 +878,7 @@ body[data-ds-dark-theme] {
       return isRu()
         ? {
           newChat: 'Новый чат',
+          newSession: 'Новая сессия',
           noSessions: 'Пока нет сессий',
           all: 'Все',
           allProjects: 'Все сессии',
@@ -866,6 +921,7 @@ body[data-ds-dark-theme] {
         }
         : {
           newChat: 'New chat',
+          newSession: 'New session',
           noSessions: 'No sessions yet',
           all: 'All',
           allProjects: 'All sessions',
@@ -1826,8 +1882,20 @@ body[data-ds-dark-theme] {
         }
       }, [scroller])
 
+      // The shipped New-session bar is hidden while this pane renders (see the
+      // [data-slot="sidebar.session.action"] rules): the button belongs here,
+      // under the project name, above the Sessions it starts next to.
+      const newSessionBar = h('button', {
+        type: 'button',
+        className: 'dpr-new',
+        title: text.newSession,
+        'aria-label': text.newSession,
+        onClick: startSession,
+      }, plusGlyph(), h('span', { className: 'dpr-new-label' }, text.newSession))
+
       const pane = h('div', { className: 'dpr-pane' },
         head,
+        newSessionBar,
         h('div', { className: 'dpr-list', ref: bindScroller }, rows))
 
       // The collapsed rail is 56px by contract: only the strip fits there.

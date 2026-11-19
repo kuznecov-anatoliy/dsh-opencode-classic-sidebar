@@ -22,6 +22,9 @@ is not affiliated with the OpenCode project.
 
 ![The sidebar with the caption-strip panel buttons, project column, project header and session list](../assets/sidebar-overview.png)
 
+The screenshot shows an earlier revision with the brand row and the New-session bar
+above the column; both changed since (see **What the sidebar carries**).
+
 ## How the region is taken over
 
 The shipped `WorkspaceBrowser` occupies the single `sidebar.workspaces` slot at
@@ -62,6 +65,15 @@ missing service answers 503 and the Client shows a failure notice.
 - **Project header** — project title, session count, the project **…** menu, the
   archive toggle, a new-chat button and the shortened `~` path of the workspace
   (full path in the tooltip).
+- **New session** — a full-width button between the project header and the
+  session list. The shipped bar above the column is hidden while the pane
+  renders, so the action sits next to the project it starts in; in the collapsed
+  rail the pane is absent and the shipped control stays.
+- **Two shipped rows removed** — the brand (mark + wordmark) is gone and the
+  Windows logo band collapses to zero height, so the column starts right under
+  the caption strip. The collapse toggle survives: on Windows it is
+  `position: fixed` over the caption strip, the same trick the shipped collapsed
+  state uses.
 - **Archive view** — archived sessions of every project, with restore.
 - **Balance chip** — reads `/api/dsh-opencode-classic-sidebar/balance` (GET) and
   `/balance/refresh` (POST), caches a reading for 30 s, polls every 60 s and on
@@ -77,11 +89,22 @@ missing service answers 503 and the Client shows a failure notice.
 ## Styling notes
 
 The bundle inherits theme tokens (`--dsw-alias-*`, `--dsw-specific-sidebar-fill`)
-and ships one `<style>` element per plugin effect. The shipped sidebar brand row
-and New-session bar are tuned through their documented `[data-slot="..."]`
-anchors — `sidebar.brand.mark`, `sidebar.brand.name`, `sidebar.session.action` —
-because their CSS-module class names are build hashes. Only that decorative
-override can be lost by a sidebar redesign; the list itself uses its own classes.
+and ships one `<style>` element per plugin effect. The shipped sidebar chrome is
+replaced through the seams the shell keeps stable, never through CSS-module hashes:
+
+- `[data-slot="sidebar.brand.mark"]`, `[data-slot="sidebar.brand.name"]` — the
+  brand slots, whose contents are hidden;
+- `data-window-drag` on the logo row plus `:has()` — hides the wrapper that held
+  the brand (on Windows that wrapper is also a New Session button) and, under
+  `html[data-windows-titlebar]`, collapses the row's 40px band;
+- `data-platform` on the document element keeps the macOS rail's mark slot (the
+  toggle reuses it) untouched;
+- `:has(.dpr-pane) > :has(> [data-slot="sidebar.session.action"])` — hides the
+  shipped New-session row exactly while this pane renders, so the collapsed rail
+  keeps its control.
+
+A sidebar redesign can drop these decorative rules; it cannot break the list
+itself, which uses its own classes.
 
 ## Limits
 

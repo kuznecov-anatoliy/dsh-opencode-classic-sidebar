@@ -282,12 +282,16 @@ const tick = () => new Promise((resolve) => setTimeout(resolve, 20))
   assert(styleTags.length === 1, 'one style tag injected')
   assert(styleTags[0].textContent.includes('.dpr-project-add'), 'add-tile CSS shipped')
   assert(styleTags[0].textContent.includes('--dpr-tone-6'), 'the tile palette shipped')
-  // Shipped sidebar chrome overrides ride the Slot anchors, never the hashed
-  // CSS-module classes: the brand dims and the New-session bar loses its fill.
-  assert(styleTags[0].textContent.includes("[data-slot='sidebar.brand.mark'] svg"), 'brand mark dimmed')
+  // Shipped sidebar chrome overrides ride stable seams (Slot anchors and data
+  // attributes), never the hashed CSS-module classes: the brand band is dropped
+  // through the logo row, and the rail's New-session control loses its fill.
+  assert(
+    styleTags[0].textContent.includes("[data-window-drag]:has([data-slot='sidebar.brand.mark'])"),
+    'the brand is dropped through the logo row seam',
+  )
   assert(
     styleTags[0].textContent.includes("[data-slot='sidebar.session.action'] button"),
-    'new-session bar overridden through its Slot anchor',
+    'the New-session control is reached through its Slot anchor',
   )
   assert(
     /\[data-slot='sidebar\.session\.action'\] button \{[^}]*background: transparent/.test(styleTags[0].textContent),
@@ -443,6 +447,24 @@ const tick = () => new Promise((resolve) => setTimeout(resolve, 20))
     'attention outranks a running Session',
   )
   assert(markersOf(tileOfAll()).length === 0, 'the All tile stays bare while a project waits for an answer')
+
+  // 12. The shipped chrome is replaced: the brand band is gone and the
+  //     New-session bar now lives between the project header and the list.
+  const paneNode = findByClass(tree, 'dpr-pane')
+  assert(paneNode !== null, 'the pane is rendered')
+  const paneChildren = paneNode.props.children.filter((child) => child !== null && child !== undefined)
+  assert(paneChildren[1]?.props?.className === 'dpr-new', 'the New-session bar sits under the project header')
+  assert(String(paneChildren[2]?.props?.className).includes('dpr-list'), 'the bar sits above the session list')
+  const sessionsBefore = calls.startSession.length
+  findByClass(tree, 'dpr-new').props.onClick()
+  assert(calls.startSession.length === sessionsBefore + 1, 'the bar starts a Session')
+  const chromeCss = styleTags[0].textContent
+  assert(
+    chromeCss.includes(":has(> [data-slot='sidebar.session.action'])"),
+    'the shipped New-session row is hidden while the pane renders',
+  )
+  assert(chromeCss.includes(':has([data-slot=\'sidebar.brand.mark\'])'), 'the brand is dropped but the toggle survives')
+  assert(chromeCss.includes('html[data-windows-titlebar] [data-window-drag]'), 'the Windows logo band collapses')
 
   console.log('harness OK')
   console.log(JSON.stringify({

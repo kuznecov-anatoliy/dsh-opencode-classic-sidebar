@@ -11,11 +11,14 @@ OpenCode's code, and is not affiliated with the OpenCode project.
 
 ![The sidebar: panel buttons in the caption strip, project column, project header with its path, and the session list](assets/sidebar-overview.png)
 
-Top to bottom in that screenshot: the **Plugins** and **Schedules** buttons in the
-window caption strip, the muted brand row, the contour-only **New session** bar,
-the **project column** with live markers (All, then one tile per project, then the
-**+** tile), the project header with its `~` path and actions, and the **session
-list** of the selected project with the open session filled in.
+The screenshot shows an earlier revision: it still has the muted **brand row** and
+the **New session** bar above the column. Since then the brand is removed and that
+bar moved under the project name, into the gap before the session list. What the
+screenshot gets right, top to bottom: the **Plugins** and **Schedules** buttons in
+the window caption strip, the **project column** with live markers (All, then one
+tile per project, then the **+** tile), the project header with its `~` path and
+actions, and the **session list** of the selected project with the open session
+filled in.
 
 ## Install
 
@@ -34,6 +37,13 @@ comes back.
   hue hashed from the workspace id, and are colour-coded against the theme. The
   **+** tile adds a project through the native folder dialog and opens a fresh
   session in it.
+- **New session** — a full-width button in the gap between the project name and
+  its session list, so a chat starts next to the project it starts in. The
+  shipped bar above the column is hidden while the column is expanded; the
+  collapsed rail keeps the shipped New-session control.
+- **Brand removed** — the logo row no longer shows the DeepSeek Harness mark or
+  wordmark: only the collapse toggle stays (it sits in the caption strip on
+  Windows), which also gives the column that much more height.
 - **Session list of the selected project** — title and relative time; pinned
   sessions lead; the session shown in the main view is filled in.
 - **Markers** — a ring on the tile that holds the session open in the main view, a
@@ -70,10 +80,11 @@ comes back.
   `sessionController.rename`, because the shipped rename dialog belongs to the
   browser this bundle replaces. If that internal service is unavailable the
   action reports a failure instead of pretending to succeed.
-- The brand row and the New-session bar are restyled through the documented
-  `[data-slot="..."]` anchors of the sidebar, not through the shipped
-  CSS-module hashes. A future sidebar redesign can drop that cosmetic override;
-  it cannot break the list itself.
+- The shipped sidebar chrome (brand row, New-session row) is replaced through the
+  stable seams of the shell — the `[data-slot="..."]` anchors, `data-window-drag`
+  on the logo row and `data-platform`/`data-windows-titlebar` on the document
+  element — never through the shipped CSS-module hashes. A future sidebar
+  redesign can drop that cosmetic override; it cannot break the list itself.
 - Requires DeepSeek Harness `>=0.2.2-rc.1 <0.3.0`.
 
 ## Development
