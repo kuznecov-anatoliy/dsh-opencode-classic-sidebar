@@ -884,7 +884,6 @@ html[data-windows-titlebar] [data-window-drag]:has([data-slot='sidebar.brand.mar
     function strings() {
       return isRu()
         ? {
-          newChat: 'Новый чат',
           newSession: 'Новая сессия',
           noSessions: 'Пока нет сессий',
           all: 'Все',
@@ -927,7 +926,6 @@ html[data-windows-titlebar] [data-window-drag]:has([data-slot='sidebar.brand.mar
           archiveBusy: 'Нельзя архивировать: в сессии идёт работа',
         }
         : {
-          newChat: 'New chat',
           newSession: 'New session',
           noSessions: 'No sessions yet',
           all: 'All',
@@ -1711,14 +1709,7 @@ html[data-windows-titlebar] [data-window-drag]:has([data-slot='sidebar.brand.mar
             'aria-label': archivedOnly ? text.leaveArchive : text.archiveView,
             'aria-pressed': archivedOnly ? 'true' : 'false',
             onClick: () => { setArchivedOnly((current) => !current) },
-          }, glyph('archive', 16)),
-          h('button', {
-            type: 'button',
-            className: 'dpr-action',
-            title: text.newChat,
-            'aria-label': text.newChat,
-            onClick: startSession,
-          }, plusGlyph())),
+          }, glyph('archive', 16))),
         where === '' ? null : h('div', { className: 'dpr-path', title: fullPath }, where),
         notice === '' ? null : h('div', { className: 'dpr-notice', role: 'status' }, notice),
         addError === '' ? null : h('div', { className: 'dpr-error', role: 'alert', title: addError }, addError))

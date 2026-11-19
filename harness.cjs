@@ -463,6 +463,10 @@ const tick = () => new Promise((resolve) => setTimeout(resolve, 20))
     chromeCss.includes(":has(> [data-slot='sidebar.session.action'])"),
     'the shipped New-session row is hidden while the pane renders',
   )
+  assert(
+    findAllByClass(tree, 'dpr-action').every((node) => node.props.title !== 'Новый чат'),
+    'the header keeps no duplicate New-chat button',
+  )
   assert(chromeCss.includes(':has([data-slot=\'sidebar.brand.mark\'])'), 'the brand is dropped but the toggle survives')
   assert(chromeCss.includes('html[data-windows-titlebar] [data-window-drag]'), 'the Windows logo band collapses')
 

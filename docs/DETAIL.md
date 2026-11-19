@@ -63,8 +63,9 @@ missing service answers 503 and the Client shows a failure notice.
   every project at once, so a dot on it would point at no project; its tooltip
   still lists the summed hints. `prefers-reduced-motion` is honoured.
 - **Project header** — project title, session count, the project **…** menu, the
-  archive toggle, a new-chat button and the shortened `~` path of the workspace
-  (full path in the tooltip).
+  archive toggle and the shortened `~` path of the workspace (full path in the
+  tooltip). Starting a chat lives in the New-session bar below, so the header
+  carries no duplicate **+**.
 - **New session** — a full-width button between the project header and the
   session list. The shipped bar above the column is hidden while the pane
   renders, so the action sits next to the project it starts in; in the collapsed
