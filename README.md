@@ -39,7 +39,9 @@ comes back.
 - **Markers** — a ring on the tile that holds the session open in the main view, a
   blue pulse while a session of that project runs, a faster red pulse when a
   session waits for your answer (approval or question), a green dot for a
-  finished session you have not looked at yet.
+  finished session you have not looked at yet. Only project tiles carry a dot:
+  the **All** tile is a filter over every project, so it stays bare and keeps the
+  summed hints in its tooltip.
 - **Session actions** — the **…** button on a hovered row or a right click opens
   the row menu: pin/unpin, rename, fork, copy id, archive. Archived sessions are
   restored from the archive view, not deleted.

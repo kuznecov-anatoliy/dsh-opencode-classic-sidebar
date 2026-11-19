@@ -411,6 +411,39 @@ const tick = () => new Promise((resolve) => setTimeout(resolve, 20))
   reopened.props.children[1].props.onClick()
   assert(calls.selectPanel.length === 2 && calls.selectPanel[1] === null, 'a second click returns to the conversation')
 
+  // 11. Status dots: a project tile wears one, the "All" tile never does.
+  workspaceState.archivedSessionIds = []
+  statusMap.set('s1', { running: true })
+  statusMap.set('s2', { running: false, pendingInteraction: undefined, completionUnread: true })
+  render()
+  const markersOf = (node) => {
+    const found = []
+    walk(node, (child) => {
+      if (String(child.props?.className ?? '').split(' ').includes('dpr-marker')) found.push(child)
+    })
+    return found
+  }
+  const tileOfAll = () => findAllByClass(tree, 'dpr-project').find((node) => node.props['data-all'] !== undefined)
+  const tileOfProject = () => findAllByClass(tree, 'dpr-project').find((node) => node.props['data-dpr-tone'] !== undefined)
+  assert(markersOf(tileOfAll()).length === 0, 'the All tile shows no status dot')
+  const runningMarkers = markersOf(tileOfProject())
+  assert(
+    runningMarkers.length === 1 && runningMarkers[0].props['data-kind'] === 'run',
+    'a project tile still shows work in progress',
+  )
+  assert(String(tileOfAll().props.title).includes('идёт работа'), 'the All tile keeps the hint in its tooltip')
+
+  // A pending question outranks running work on the project tile, and the All
+  // tile still stays bare: the dot it used to borrow pointed at no project.
+  statusMap.set('s2', { running: false, pendingInteraction: {}, completionUnread: false })
+  render()
+  const attentionMarkers = markersOf(tileOfProject())
+  assert(
+    attentionMarkers.length === 1 && attentionMarkers[0].props['data-kind'] === 'attention',
+    'attention outranks a running Session',
+  )
+  assert(markersOf(tileOfAll()).length === 0, 'the All tile stays bare while a project waits for an answer')
+
   console.log('harness OK')
   console.log(JSON.stringify({
     pick: calls.pick,

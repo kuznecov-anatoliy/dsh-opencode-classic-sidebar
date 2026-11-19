@@ -56,7 +56,9 @@ missing service answers 503 and the Client shows a failure notice.
 - **Markers** — `retainedBy.mainView > 0` rings the tile of the project holding
   the open session; running sessions pulse blue, sessions waiting for an answer
   pulse red faster, `completionUnread` shows a green dot. One marker per tile by
-  priority red → blue → green. `prefers-reduced-motion` is honoured.
+  priority red → blue → green. The **All** tile carries none of them: it filters
+  every project at once, so a dot on it would point at no project; its tooltip
+  still lists the summed hints. `prefers-reduced-motion` is honoured.
 - **Project header** — project title, session count, the project **…** menu, the
   archive toggle, a new-chat button and the shortened `~` path of the workspace
   (full path in the tooltip).

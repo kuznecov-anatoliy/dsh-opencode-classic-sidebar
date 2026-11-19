@@ -48,6 +48,12 @@ window.__ModuleLoader__.load({
   overflow: hidden;
   font-size: 13px;
   color: var(--dsw-alias-label-primary);
+  /* The band between a 40px project tile and the Session titles next to it.
+     Left alone it was 14px (4px of strip centering inside the 52px column plus
+     the row's own 8px of padding), which read as the two columns touching. The
+     pane grew it 5x (70px), then -25% (52.5px), -10% (47.25px) and -10% again
+     (42.5px), so 28.5px of padding carries the difference. */
+  --dpr-pane-inset: 28.5px;
 }
 .dpr-strip {
   flex: none;
@@ -55,9 +61,11 @@ window.__ModuleLoader__.load({
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* 8px between the 40px tiles: the strip read as a solid wall of squares at
-     4px, and OpenCode-style columns keep a clear seam between projects. */
-  gap: 8px;
+  /* 16px between the 40px tiles: the strip read as a solid wall of squares at
+     4px, and OpenCode-style columns keep a clear seam between projects. The
+     seam is doubled from the first 8px because the tiles still blurred into a
+     vertical bar at that spacing. */
+  gap: 16px;
   padding: 4px 2px 8px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -91,7 +99,9 @@ window.__ModuleLoader__.load({
 /* Adding a project sits after the tiles, dressed as an empty slot: a dashed
    outline reads as "room for one more" rather than as another project. */
 .dpr-project-add {
-  margin-top: 6px;
+  /* A little more air than the tile gap above it: the dashed slot is not a
+     project, and at the doubled 16px seam it needs 8px on top to stay apart. */
+  margin-top: 8px;
   border: 1px dashed var(--dsw-alias-border-l1);
   color: var(--dsw-alias-label-tertiary);
 }
@@ -269,6 +279,11 @@ body[data-ds-dark-theme] {
 .dpr-pane {
   flex: 1 1 auto;
   min-width: 0;
+  /* The band to the project tiles lives on the pane, so the project name above
+     and every Session row shift together instead of the header drifting away
+     from the list. */
+  padding-left: var(--dpr-pane-inset);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -350,9 +365,10 @@ body[data-ds-dark-theme] {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  /* 4px between 30px rows: the list breathes like the original browser's
-     session column instead of stacking as one solid block. */
-  gap: 4px;
+  /* 6px between 30px rows: the list breathes like the original browser's
+     session column instead of stacking as one solid block. Grown by half from
+     the original 4px, so the rows read as separate sessions at a glance. */
+  gap: 6px;
   /* A breath between the project name above and its Sessions: the two used to
      run together into one block of text. The gap sits on the list alone, so the
      project column keeps starting at the very top of the region. */
@@ -1202,12 +1218,14 @@ body[data-ds-dark-theme] {
     /**
      * One tile marker, by precedence: a request for the user (red, fast pulse)
      * beats work in progress (blue pulse) beats an unread completion (green).
+     * Only a project tile wears one: it names a single project, so the dot has
+     * one owner. The "All" tile deliberately stays bare (see its call site).
      */
-    function tileMarkers(state, includeRunning) {
+    function tileMarkers(state) {
       if (state.attention) {
         return [h('span', { key: 'attention', className: 'dpr-marker', 'data-kind': 'attention', 'aria-hidden': true })]
       }
-      if (includeRunning && state.running) {
+      if (state.running) {
         return [h('span', { key: 'run', className: 'dpr-marker', 'data-kind': 'run', 'aria-hidden': true })]
       }
       if (state.unread) {
@@ -1559,6 +1577,9 @@ body[data-ds-dark-theme] {
       }
 
       const strip = h('div', { className: 'dpr-strip' },
+        // No status dot on purpose: "All" is a filter over every project, not a
+        // project of its own, so a dot on it would point at nothing. The tooltip
+        // still carries the summed hints for whoever wants them.
         h('button', {
           key: ALL,
           type: 'button',
@@ -1568,7 +1589,7 @@ body[data-ds-dark-theme] {
           'aria-label': decoratedLabel(text.allProjects, allStatus),
           'aria-current': selection === ALL ? 'true' : undefined,
           onClick: () => { choose(ALL, undefined) },
-        }, text.all, tileMarkers(allStatus, false)),
+        }, text.all),
         items.map((workspace) => {
           const current = active !== null && workspace.workspaceId === active.workspaceId
           const state = statusOfWorkspace(workspace)
@@ -1587,7 +1608,7 @@ body[data-ds-dark-theme] {
             onContextMenu: (event) => {
               openMenu(event, { kind: 'projectMenu', id: workspace.workspaceId, title: workspace.title })
             },
-          }, initialsOf(workspace), tileMarkers(state, true))
+          }, initialsOf(workspace), tileMarkers(state))
         }),
         h('button', {
           key: '@add',
